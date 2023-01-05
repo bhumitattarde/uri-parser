@@ -1,0 +1,46 @@
+name: uri-parser-test
+
+# Get triggered on
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  release:
+
+jobs:
+  # job tp  build and run unit tests
+  build-and-test:
+    # Define a strategy
+    strategy:
+      # Matrix of configs to test
+      matrix:
+        config:
+          - { name: ubuntu, os: ubuntu-latest }
+          - { name: macOS, os: macos-latest }
+          #TODO - { name: windows, os: windows-latest }
+
+    name: ${{ matrix.config.name }}
+    runs-on: ${{ matrix.config.os }}
+
+    steps:
+      # Check out repo with submodules
+      - uses: actions/checkout@v2
+        with:
+          submodules: true
+
+      # Build & test on Linux
+      - name: Build and test on (Ubuntu) Linux
+        if: startsWith(matrix.config.name, 'ubuntu')
+        run: |
+          sudo apt update && sudo apt -y install git g++ build-essential cmake googletest
+          cmake .. -DBUILD_EXAMPLE=ON -DBUILD_TESTS=ON && make && make test ARGS="-V"
+
+      # Build & test on macOS
+      - name: Build and test on macOS
+        if: startsWith(matrix.config.name, 'macOS')
+        run: |
+          brew extract --version=1.10.0 googletest homebrew/cask && brew install googletest@1.10.0
+
+          mkdir build && cd build
+          cmake .. -DBUILD_EXAMPLES=ON -DBUILD_TESTS=ON && make && make test ARGS="-V"
