@@ -33,7 +33,7 @@ jobs:
       - name: Build and test on (Ubuntu) Linux
         if: startsWith(matrix.config.name, 'ubuntu')
         run: |
-          sudo apt update && sudo apt -y install git g++ build-essential cmake googletest
+          sudo apt update && sudo apt -y install git g++ build-essential cmake libgtest-dev googletest
           mkdir build && cd build
           cmake .. -DBUILD_EXAMPLE=ON -DBUILD_TESTS=ON && make && make test ARGS="-V"
 
