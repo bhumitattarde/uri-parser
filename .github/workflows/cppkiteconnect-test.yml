@@ -34,6 +34,7 @@ jobs:
         if: startsWith(matrix.config.name, 'ubuntu')
         run: |
           sudo apt update && sudo apt -y install git g++ build-essential cmake googletest
+          mkdir build && cd build
           cmake .. -DBUILD_EXAMPLE=ON -DBUILD_TESTS=ON && make && make test ARGS="-V"
 
       # Build & test on macOS
@@ -41,6 +42,5 @@ jobs:
         if: startsWith(matrix.config.name, 'macOS')
         run: |
           brew extract --version=1.10.0 googletest homebrew/cask && brew install googletest@1.10.0
-
           mkdir build && cd build
           cmake .. -DBUILD_EXAMPLES=ON -DBUILD_TESTS=ON && make && make test ARGS="-V"
