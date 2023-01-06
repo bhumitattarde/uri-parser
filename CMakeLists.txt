@@ -8,11 +8,8 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 # build examples
 if(BUILD_EXAMPLE)
     set(EXAMPLE_NAME example)
-    add_executable($ {
-        EXAMPLE_NAME
-        } "${CMAKE_SOURCE_DIR}/example.cpp")
-    target_include_directories($ {
-        EXAMPLE_NAME } PUBLIC "${CMAKE_SOURCE_DIR}")
+    add_executable(${EXAMPLE_NAME} "${CMAKE_SOURCE_DIR}/example.cpp")
+    target_include_directories(${EXAMPLE_NAME} PUBLIC "${CMAKE_SOURCE_DIR}")
 endif()
 
 # build tests
@@ -28,8 +25,8 @@ if(BUILD_TESTS)
     set(TEST_NAME parserTest)
     file(
         GLOB test_files "${CMAKE_SOURCE_DIR}/test/unit/*.cpp")
-    add_executable($ { TEST_NAME } $ { test_files })
+    add_executable(${TEST_NAME} ${test_files})
     target_include_directories(${TEST_NAME} PUBLIC ${GTEST_INCLUDE_DIRS})
-    target_link_libraries(${TEST_NAME} PUBLIC $ {GTEST_LIBRARIES} Threads::Threads)
+    target_link_libraries(${TEST_NAME} PUBLIC ${GTEST_LIBRARIES} Threads::Threads)
     add_test(NAME parserTest COMMAND ${TEST_NAME})
 endif()
