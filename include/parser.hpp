@@ -37,8 +37,6 @@ inline std::string encodeUrl(const std::string& s) {
         if ((ci >= 'a' && ci <= 'z') || (ci >= 'A' && ci <= 'Z') ||
             (ci >= '0' && ci <= '9')) { // allowed
             os << ci;
-        } else if (ci == ' ') {
-            os << '+';
         } else {
             os << '%' << toHex(ci >> 4) << toHex(ci % 16);
         }
@@ -51,9 +49,7 @@ inline std::string decodeUrl(const std::string& str) {
     std::string result;
     std::string::size_type i;
     for (i = 0; i < str.size(); ++i) {
-        if (str[i] == '+') {
-            result += ' ';
-        } else if (str[i] == '%' && str.size() > i + 2) {
+        if (str[i] == '%' && str.size() > i + 2) {
             const unsigned char ch1 = fromHex(str[i + 1]);
             const unsigned char ch2 = fromHex(str[i + 2]);
             const unsigned char ch = (ch1 << 4) | ch2;
